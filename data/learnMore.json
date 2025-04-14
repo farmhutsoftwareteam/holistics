@@ -1,0 +1,18 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "assetID": "hairLossInfoIllustration",
+      "title": "Hair loss needn't be irreversible. We can help!",
+      "header": "HAIR LOSS",
+      "subtitle": "We're working around the clock to bring you a holistic approach to your wellness. From top to bottom, inside and out."
+    },
+    {
+      "id": 2,
+      "assetID": "erectileDysfunctionInfoIllustration",
+      "title": "Erections can be a tricky thing. But no need to feel down!",
+      "header": "ERECTILE DYSFUNCTION",
+      "subtitle": "We're working around the clock to bring you a holistic approach to your wellness. From top to bottom, inside and out."
+    }
+  ]
+}
