@@ -9,7 +9,7 @@ import { router } from 'expo-router';
 export const Onboarding: React.FC = () => {
     const { fontsLoaded, onLayoutRootView } = useFonts();
     const { width, height } = useWindowDimensions();
-    
+
 
     // Calculate responsive font size based on screen dimensions
     const baseFontSize = Math.min(width * 0.15, height * 0.1); // Adjust these multipliers as needed
@@ -20,6 +20,7 @@ export const Onboarding: React.FC = () => {
     const handlePress = () => {
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
         // TODO: Navigate to quiz
+        router.push('/quiz');
     };
 
     const handleLearnMore = () => {
@@ -81,12 +82,12 @@ const styles = StyleSheet.create({
     text: {
         color: '#0B3B3C',
         textAlign: 'center',
-        fontFamily: 'Roboto-Bold',
+        fontFamily: 'Montserrat-Bold',
     },
     subtitle: {
         color: '#0B3B3C',
         textAlign: 'center',
-        fontFamily: 'Roboto-Regular',
+        fontFamily: 'Montserrat',
         marginTop: 20,
         maxWidth: '80%',
         lineHeight: 24,
@@ -97,7 +98,7 @@ const styles = StyleSheet.create({
     },
     learnMore: {
         color: '#0B3B3C',
-        fontFamily: 'Roboto-Regular',
+        fontFamily: 'Montserrat',
         fontSize: 16,
         textDecorationLine: 'underline',
         marginBottom: 20,
@@ -113,7 +114,7 @@ const styles = StyleSheet.create({
     },
     buttonText: {
         color: '#FFFFFF',
-        fontFamily: 'Roboto-Bold',
+        fontFamily: 'Montserrat-SemiBold',
         fontSize: 18,
     },
 }); 

@@ -5,11 +5,6 @@ import learnMoreData from '../../data/learnMore.json';
 
 const { width } = Dimensions.get('window');
 
-const IMAGES = {
-    hairLoss: "https://res.cloudinary.com/dmaj8ih7p/image/upload/v1744626810/hair-loss-info-illustration_3x_skogop.png",
-    erectileDysfunction: "https://res.cloudinary.com/dmaj8ih7p/image/upload/v1744626962/erectile-dysfunction-info-illustration_3x_p0u37i.png"
-};
-
 export default function LearnMore() {
     const [currentScreen, setCurrentScreen] = useState(0);
     const flatListRef = useRef<FlatList>(null);
@@ -26,30 +21,29 @@ export default function LearnMore() {
     };
 
     const getImageSource = (index: number) => {
-        return index === 0 ? IMAGES.hairLoss : IMAGES.erectileDysfunction;
+        return index === 0
+            ? "https://res.cloudinary.com/dmaj8ih7p/image/upload/v1744626810/hair-loss-info-illustration_3x_skogop.png"
+            : "https://res.cloudinary.com/dmaj8ih7p/image/upload/v1744626962/erectile-dysfunction-info-illustration_3x_p0u37i.png";
     };
 
-    const renderItem = ({ item, index }: { item: any, index: number }) => (
-        <View style={styles.slide}>
-            <View style={styles.mainContent}>
-                <View style={[
-                    styles.imageContainer,
-                    index === 1 && styles.imageContainerRight
-                ]}>
-                    <View style={styles.imageWrapper}>
-                        <Image
-                            style={styles.image}
-                            source={getImageSource(index)}
-                            contentFit="cover"
-                            transition={200}
-                        />
-                        <Text style={[
-                            styles.bigNumber,
-                            index === 0 ? styles.numberRight : styles.numberLeft
-                        ]}>
-                            {String(index + 1).padStart(2, '0')}
-                        </Text>
-                    </View>
+    const renderItem = ({ item, index }: { item: any, index: number }) => {
+        // Determine conditional styles based on index
+        const isEvenIndex = index % 2 === 0;
+        const imageStyle = isEvenIndex ? { left: 10 } : { right: 10 };
+        const numberStyle = isEvenIndex ? { right: 1 } : { left: 1 };
+
+        return (
+            <View style={styles.slide}>
+                <View style={styles.heroContainer}>
+                    <Text style={[styles.bigNumber, numberStyle]}>
+                        {String(index + 1).padStart(2, '0')}
+                    </Text>
+                    <Image
+                        style={[styles.heroImage, imageStyle]}
+                        source={getImageSource(index)}
+                        contentFit="cover"
+                        transition={200}
+                    />
                 </View>
 
                 <View style={styles.textContainer}>
@@ -58,8 +52,8 @@ export default function LearnMore() {
                     <Text style={styles.subtitle}>{item.subtitle}</Text>
                 </View>
             </View>
-        </View>
-    );
+        );
+    };
 
     const handleScroll = (event: any) => {
         const newIndex = Math.round(event.nativeEvent.contentOffset.x / width);
@@ -83,30 +77,27 @@ export default function LearnMore() {
                     keyExtractor={(item) => item.id.toString()}
                 />
 
-                <View style={styles.footer}>
-                    {/* Progress Dots */}
-                    <View style={styles.dotsContainer}>
-                        {data.map((_, index) => (
-                            <View
-                                key={index}
-                                style={[
-                                    styles.dot,
-                                    index === currentScreen && styles.activeDot,
-                                ]}
-                            />
-                        ))}
-                    </View>
-
-                    <TouchableOpacity
-                        style={styles.button}
-                        onPress={handleNext}
-                        activeOpacity={0.8}
-                    >
-                        <Text style={styles.buttonText}>
-                            {currentScreen === data.length - 1 ? 'DONE' : 'NEXT'}
-                        </Text>
-                    </TouchableOpacity>
+                <View style={styles.dotsContainer}>
+                    {data.map((_, index) => (
+                        <View
+                            key={index}
+                            style={[
+                                styles.dot,
+                                index === currentScreen && styles.activeDot,
+                            ]}
+                        />
+                    ))}
                 </View>
+
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={handleNext}
+                    activeOpacity={0.8}
+                >
+                    <Text style={styles.buttonText}>
+                        {currentScreen === data.length - 1 ? 'DONE' : 'NEXT'}
+                    </Text>
+                </TouchableOpacity>
             </View>
         </SafeAreaView>
     );
@@ -119,81 +110,74 @@ const styles = StyleSheet.create({
     },
     content: {
         flex: 1,
+        alignItems: 'center',
     },
     flatList: {
         flex: 1,
     },
     slide: {
         width: width,
-        flex: 1,
-    },
-    mainContent: {
+        alignItems: 'flex-start',
+        paddingHorizontal: 20,
+        position: 'relative',
         flex: 1,
         justifyContent: 'center',
-        paddingHorizontal: 20,
     },
-    imageContainer: {
+    heroContainer: {
         width: '100%',
-        marginBottom: 20,
-        alignItems: 'flex-start',
-    },
-    imageContainerRight: {
-        alignItems: 'flex-end',
-    },
-    imageWrapper: {
+        height: 220,
         position: 'relative',
-        width: width * 0.45,
+        justifyContent: 'center',
     },
     image: {
-        width: width * 0.45,
-        height: width * 0.45,
-        borderRadius: 12,
+        // old image style removed
+    },
+    heroImage: {
+        width: 200,
+        height: 220,
+        borderRadius: 15,
+        position: 'absolute',
+        top: 0,
+        zIndex: 2,
         backgroundColor: '#8FA086',
     },
     bigNumber: {
-        fontSize: 140,
+        fontSize: 180,
         color: '#FFFFFF',
-        opacity: 0.5,
-        fontFamily: 'Roboto-Bold',
+        fontFamily: 'Montserrat-Bold',
         position: 'absolute',
-        top: -20,
+        top: 10,
         zIndex: 1,
-    },
-    numberRight: {
-        right: -width * 0.15,
-    },
-    numberLeft: {
-        left: -width * 0.15,
+        letterSpacing: -3.2,
     },
     textContainer: {
-        alignItems: 'flex-start',
         marginTop: 20,
+        width: '100%',
+        paddingHorizontal: 20,
+        alignItems: 'flex-start',
     },
     categoryHeader: {
-        fontSize: 14,
-        color: '#0B3B3C',
-        fontFamily: 'Roboto-Bold',
-        letterSpacing: 1,
+        fontSize: 12,
+        color: '#6D8A83',
+        fontFamily: 'Montserrat-Bold',
+        letterSpacing: 1.5,
+        textTransform: 'uppercase',
         marginBottom: 10,
-        textAlign: 'left',
     },
     title: {
-        fontSize: 24,
+        fontSize: 26,
         color: '#0B3B3C',
-        fontFamily: 'Roboto-Bold',
-        marginBottom: 10,
+        fontFamily: 'Montserrat-Bold',
         textAlign: 'left',
+        marginBottom: 10,
+        lineHeight: 34,
     },
     subtitle: {
         fontSize: 16,
         color: '#0B3B3C',
-        fontFamily: 'Roboto-Regular',
-        lineHeight: 24,
+        fontFamily: 'Montserrat',
         textAlign: 'left',
-    },
-    footer: {
-        alignItems: 'center',
-        paddingBottom: 20,
+        lineHeight: 24,
     },
     dotsContainer: {
         flexDirection: 'row',
@@ -216,13 +200,13 @@ const styles = StyleSheet.create({
         paddingHorizontal: 32,
         borderRadius: 100,
         width: '90%',
+        marginBottom: 20,
         alignItems: 'center',
         justifyContent: 'center',
     },
     buttonText: {
         color: '#FFFFFF',
-        fontFamily: 'Roboto-Bold',
+        fontFamily: 'Montserrat-SemiBold',
         fontSize: 18,
-        textAlign: 'center',
     },
 });
