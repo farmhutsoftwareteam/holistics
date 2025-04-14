@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image, ScrollView, SafeAreaView, Linking } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Image, ScrollView, SafeAreaView, Linking, Platform } from 'react-native';
 import quizData from '@/data/quiz.json';
 import { useRouter } from 'expo-router';
 import { useQuizContext } from '@/context/QuizContext';
 import * as WebBrowser from 'expo-web-browser';
+import { useResponsiveLayout } from '@/hooks/useResponsiveLayout';
 
 interface Option {
     display: string;
@@ -32,6 +33,7 @@ export default function QuizScreen() {
     const [selectedIdx, setSelectedIdx] = useState<number | null>(null);
     const [selectedIndexes, setSelectedIndexes] = useState<(number | null)[]>([]);
     const router = useRouter();
+    const { isWeb, isDesktop, getResponsiveValue, containerWidth } = useResponsiveLayout();
 
     // Keep local state in sync with context
     useEffect(() => {
@@ -53,14 +55,14 @@ export default function QuizScreen() {
         const newSelectedIndexes = [...selectedIndexes];
         newSelectedIndexes[current] = idx;
         setSelectedIndexes(newSelectedIndexes);
-
-        if (option.isRejection) {
-            setRejected(true);
-        }
     };
 
     const handleOpenWebsite = async () => {
-        await WebBrowser.openBrowserAsync('https://www.manual.co');
+        if (Platform.OS === 'web') {
+            window.open('https://www.manual.co', '_blank');
+        } else {
+            await WebBrowser.openBrowserAsync('https://www.manual.co');
+        }
     };
 
     const handleNext = () => {
@@ -68,6 +70,7 @@ export default function QuizScreen() {
         const option = q.options[selectedIdx];
         setAnswers([...answers, option.value]);
 
+        // Check for rejection when Next is pressed
         if (option.isRejection) {
             setRejected(true);
             return;
@@ -94,12 +97,22 @@ export default function QuizScreen() {
     if (isRejected) {
         return (
             <SafeAreaView style={styles.container}>
-                <View style={styles.content}>
+                <View style={[
+                    styles.content,
+                    isDesktop && { maxWidth: containerWidth, alignSelf: 'center' }
+                ]}>
                     <ScrollView
-                        contentContainerStyle={[styles.scrollContent, { justifyContent: 'center' }]}
+                        contentContainerStyle={[
+                            styles.scrollContent,
+                            { justifyContent: 'center' },
+                            isDesktop && { paddingHorizontal: 40 }
+                        ]}
                         style={{ width: '100%' }}
                     >
-                        <Text style={styles.rejectedText}>
+                        <Text style={[
+                            styles.rejectedText,
+                            isDesktop && { fontSize: 32, lineHeight: 48, maxWidth: 800, alignSelf: 'center' }
+                        ]}>
                             Unfortunately, we are unable to prescribe this medication for you. This
                             is because finasteride can alter the PSA levels, which may be used to monitor for
                             cancer. You should discuss this further with your GP or specialist if you would still like
@@ -108,11 +121,20 @@ export default function QuizScreen() {
                     </ScrollView>
 
                     <TouchableOpacity
-                        style={styles.button}
+                        style={[
+                            styles.button,
+                            isDesktop && {
+                                width: Math.min(400, containerWidth * 0.5),
+                                paddingVertical: 20
+                            }
+                        ]}
                         onPress={handleGoHome}
                         activeOpacity={0.8}
                     >
-                        <Text style={styles.buttonText}>OK</Text>
+                        <Text style={[
+                            styles.buttonText,
+                            isDesktop && { fontSize: 20 }
+                        ]}>OK</Text>
                     </TouchableOpacity>
                 </View>
             </SafeAreaView>
@@ -123,16 +145,29 @@ export default function QuizScreen() {
     if (isSuccess) {
         return (
             <SafeAreaView style={styles.container}>
-                <View style={styles.content}>
+                <View style={[
+                    styles.content,
+                    isDesktop && { maxWidth: containerWidth, alignSelf: 'center' }
+                ]}>
                     <ScrollView
-                        contentContainerStyle={[styles.scrollContent, { justifyContent: 'center' }]}
+                        contentContainerStyle={[
+                            styles.scrollContent,
+                            { justifyContent: 'center' },
+                            isDesktop && { paddingHorizontal: 40 }
+                        ]}
                         style={{ width: '100%' }}
                     >
-                        <Text style={styles.successText}>
+                        <Text style={[
+                            styles.successText,
+                            isDesktop && { fontSize: 32, lineHeight: 48, maxWidth: 800, alignSelf: 'center' }
+                        ]}>
                             Great news! We have the perfect treatment for your
                             hair loss. Proceed to{' '}
                             <Text
-                                style={styles.websiteLink}
+                                style={[
+                                    styles.websiteLink,
+                                    isDesktop && { fontSize: 32 }
+                                ]}
                                 onPress={handleOpenWebsite}
                             >
                                 www.manual.co
@@ -142,11 +177,20 @@ export default function QuizScreen() {
                     </ScrollView>
 
                     <TouchableOpacity
-                        style={styles.button}
+                        style={[
+                            styles.button,
+                            isDesktop && {
+                                width: Math.min(400, containerWidth * 0.5),
+                                paddingVertical: 20
+                            }
+                        ]}
                         onPress={handleGoHome}
                         activeOpacity={0.8}
                     >
-                        <Text style={styles.buttonText}>OK</Text>
+                        <Text style={[
+                            styles.buttonText,
+                            isDesktop && { fontSize: 20 }
+                        ]}>OK</Text>
                     </TouchableOpacity>
                 </View>
             </SafeAreaView>
@@ -155,42 +199,91 @@ export default function QuizScreen() {
 
     return (
         <SafeAreaView style={styles.container}>
-            <View style={styles.content}>
+            <View style={[
+                styles.content,
+                isDesktop && { maxWidth: containerWidth, alignSelf: 'center' }
+            ]}>
                 <ScrollView
-                    contentContainerStyle={styles.scrollContent}
+                    contentContainerStyle={[
+                        styles.scrollContent,
+                        isDesktop && { paddingHorizontal: 40 }
+                    ]}
                     style={{ width: '100%' }}
                 >
-                    <View style={styles.questionContainer}>
-                        <Text style={styles.question}>{q.question}</Text>
+                    <View style={[
+                        styles.questionContainer,
+                        isDesktop && { maxWidth: 800, alignSelf: 'center' }
+                    ]}>
+                        <Text style={[
+                            styles.question,
+                            isDesktop && { fontSize: 28, marginBottom: 40 }
+                        ]}>{q.question}</Text>
                     </View>
-                    <View style={styles.optionsContainer}>
+                    <View style={[
+                        styles.optionsContainer,
+                        isDesktop && { maxWidth: 800, alignSelf: 'center' }
+                    ]}>
                         {q.type === 'ChoiceTypeImage' ? (
                             <>
-                                <View style={styles.imageRow}>
+                                <View style={[
+                                    styles.imageRow,
+                                    isDesktop && { marginBottom: 24 }
+                                ]}>
                                     {q.options.slice(0, 3).map((option, idx) => (
                                         <TouchableOpacity
                                             key={idx}
                                             style={[
                                                 styles.imageOption,
-                                                selectedIdx === idx && styles.selectedOption
+                                                selectedIdx === idx && styles.selectedOption,
+                                                isDesktop && {
+                                                    width: 140,
+                                                    height: 140,
+                                                    marginHorizontal: 12
+                                                }
                                             ]}
                                             onPress={() => handleSelect(option, idx)}
                                         >
-                                            <Image source={{ uri: option.display }} style={styles.optionImage} />
+                                            <Image
+                                                source={{ uri: option.display }}
+                                                style={[
+                                                    styles.optionImage,
+                                                    isDesktop && {
+                                                        width: 110,
+                                                        height: 110
+                                                    }
+                                                ]}
+                                            />
                                         </TouchableOpacity>
                                     ))}
                                 </View>
-                                <View style={styles.imageRow}>
+                                <View style={[
+                                    styles.imageRow,
+                                    isDesktop && { marginBottom: 24 }
+                                ]}>
                                     {q.options.slice(3, 6).map((option, idx) => (
                                         <TouchableOpacity
                                             key={idx + 3}
                                             style={[
                                                 styles.imageOption,
-                                                selectedIdx === idx + 3 && styles.selectedOption
+                                                selectedIdx === idx + 3 && styles.selectedOption,
+                                                isDesktop && {
+                                                    width: 140,
+                                                    height: 140,
+                                                    marginHorizontal: 12
+                                                }
                                             ]}
                                             onPress={() => handleSelect(option, idx + 3)}
                                         >
-                                            <Image source={{ uri: option.display }} style={styles.optionImage} />
+                                            <Image
+                                                source={{ uri: option.display }}
+                                                style={[
+                                                    styles.optionImage,
+                                                    isDesktop && {
+                                                        width: 110,
+                                                        height: 110
+                                                    }
+                                                ]}
+                                            />
                                         </TouchableOpacity>
                                     ))}
                                 </View>
@@ -201,11 +294,19 @@ export default function QuizScreen() {
                                     key={idx}
                                     style={[
                                         styles.textOption,
-                                        selectedIdx === idx && styles.selectedOption
+                                        selectedIdx === idx && styles.selectedOption,
+                                        isDesktop && {
+                                            maxWidth: 600,
+                                            padding: 20,
+                                            marginBottom: 20
+                                        }
                                     ]}
                                     onPress={() => handleSelect(option, idx)}
                                 >
-                                    <Text style={styles.optionText}>{option.display}</Text>
+                                    <Text style={[
+                                        styles.optionText,
+                                        isDesktop && { fontSize: 20 }
+                                    ]}>{option.display}</Text>
                                 </TouchableOpacity>
                             ))
                         )}
@@ -213,12 +314,22 @@ export default function QuizScreen() {
                 </ScrollView>
 
                 <TouchableOpacity
-                    style={[styles.button, { opacity: selectedIdx === null ? 0.5 : 1 }]}
+                    style={[
+                        styles.button,
+                        { opacity: selectedIdx === null ? 0.5 : 1 },
+                        isDesktop && {
+                            width: Math.min(400, containerWidth * 0.5),
+                            paddingVertical: 20
+                        }
+                    ]}
                     onPress={handleNext}
                     activeOpacity={0.8}
                     disabled={selectedIdx === null}
                 >
-                    <Text style={styles.buttonText}>NEXT</Text>
+                    <Text style={[
+                        styles.buttonText,
+                        isDesktop && { fontSize: 20 }
+                    ]}>NEXT</Text>
                 </TouchableOpacity>
             </View>
         </SafeAreaView>

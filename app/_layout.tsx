@@ -5,6 +5,7 @@ import * as Haptics from 'expo-haptics';
 import { AntDesign } from '@expo/vector-icons';
 import React from "react";
 import { QuizProvider, useQuizContext } from "../context/QuizContext";
+import { Platform } from 'react-native';
 
 export default function RootLayout() {
   return (
@@ -19,12 +20,16 @@ function RootLayoutNavigation() {
   const { currentQuestion, setCurrentQuestion, isRejected, isSuccess } = useQuizContext();
 
   const handleBack = () => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    if (Platform.OS !== 'web') {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    }
     router.back();
   };
 
   const handleQuizBack = () => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    if (Platform.OS !== 'web') {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    }
 
     if (currentQuestion === 0) {
       // If on first question, go back to home
@@ -98,6 +103,7 @@ function RootLayoutNavigation() {
         options={{
           headerShown: true,
           headerTitle: "What can we help with",
+          headerTitleAlign: 'center',
         }}
       />
     </Stack>

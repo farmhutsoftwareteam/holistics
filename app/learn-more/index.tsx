@@ -1,7 +1,9 @@
 import React, { useState, useRef } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Dimensions, SafeAreaView, FlatList } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Dimensions, SafeAreaView, FlatList, Platform } from 'react-native';
 import { Image } from 'expo-image';
 import learnMoreData from '../../data/learnMore.json';
+import { useResponsiveLayout } from '../../hooks/useResponsiveLayout';
+import { router } from 'expo-router';
 
 const { width } = Dimensions.get('window');
 
@@ -9,6 +11,10 @@ export default function LearnMore() {
     const [currentScreen, setCurrentScreen] = useState(0);
     const flatListRef = useRef<FlatList>(null);
     const data = learnMoreData.data;
+    const { isWeb, isDesktop, getResponsiveValue, containerWidth } = useResponsiveLayout();
+
+    // Use window width directly for web to ensure proper slide sizing
+    const slideWidth = isWeb ? width : (isDesktop ? containerWidth : width);
 
     const handleNext = () => {
         if (currentScreen < data.length - 1) {
@@ -17,6 +23,9 @@ export default function LearnMore() {
                 index: currentScreen + 1,
                 animated: true
             });
+        } else {
+            // If on last screen, navigate back to home
+            router.back();
         }
     };
 
@@ -29,34 +38,92 @@ export default function LearnMore() {
     const renderItem = ({ item, index }: { item: any, index: number }) => {
         // Determine conditional styles based on index
         const isEvenIndex = index % 2 === 0;
-        const imageStyle = isEvenIndex ? { left: 10 } : { right: 10 };
+        const imageStyle = isEvenIndex ? { left: 10 } : { right: 1 };
         const numberStyle = isEvenIndex ? { right: 1 } : { left: 1 };
 
+        // Responsive sizes for desktop only
+        const heroHeight = getResponsiveValue({
+            base: 220, // Keep mobile size unchanged
+            lg: 280,   // Larger for desktop
+        });
+
+        const imageWidth = getResponsiveValue({
+            base: 200, // Keep mobile size unchanged
+            lg: 260,   // Larger for desktop
+        });
+
         return (
-            <View style={styles.slide}>
-                <View style={styles.heroContainer}>
-                    <Text style={[styles.bigNumber, numberStyle]}>
+            <View style={[
+                styles.slide,
+                // Important: Set exact slide width to ensure proper pagination
+                { width: slideWidth },
+                isDesktop && {
+                    paddingHorizontal: 40,
+                    alignItems: 'center'
+                }
+            ]}>
+                <View style={[
+                    styles.heroContainer,
+                    isDesktop && {
+                        height: heroHeight,
+                        maxWidth: 800,
+                        width: '100%'
+                    }
+                ]}>
+                    <Text style={[
+                        styles.bigNumber,
+                        numberStyle,
+                        isDesktop && {
+                            fontSize: 220
+                        }
+                    ]}>
                         {String(index + 1).padStart(2, '0')}
                     </Text>
                     <Image
-                        style={[styles.heroImage, imageStyle]}
+                        style={[
+                            styles.heroImage,
+                            imageStyle,
+                            isDesktop && {
+                                width: imageWidth,
+                                height: heroHeight
+                            }
+                        ]}
                         source={getImageSource(index)}
                         contentFit="cover"
                         transition={200}
                     />
                 </View>
 
-                <View style={styles.textContainer}>
+                <View style={[
+                    styles.textContainer,
+                    isDesktop && {
+                        maxWidth: 800,
+                        marginTop: 40
+                    }
+                ]}>
                     <Text style={styles.categoryHeader}>{item.header}</Text>
-                    <Text style={styles.title}>{item.title}</Text>
-                    <Text style={styles.subtitle}>{item.subtitle}</Text>
+                    <Text style={[
+                        styles.title,
+                        isDesktop && {
+                            fontSize: 32,
+                            lineHeight: 40
+                        }
+                    ]}>{item.title}</Text>
+                    <Text style={[
+                        styles.subtitle,
+                        isDesktop && {
+                            fontSize: 18,
+                            lineHeight: 28,
+                            maxWidth: '80%'
+                        }
+                    ]}>{item.subtitle}</Text>
                 </View>
             </View>
         );
     };
 
     const handleScroll = (event: any) => {
-        const newIndex = Math.round(event.nativeEvent.contentOffset.x / width);
+        const newIndex = Math.round(event.nativeEvent.contentOffset.x / slideWidth);
         if (newIndex !== currentScreen) {
             setCurrentScreen(newIndex);
         }
@@ -75,6 +142,17 @@ export default function LearnMore() {
                     onMomentumScrollEnd={handleScroll}
                     style={styles.flatList}
                     keyExtractor={(item) => item.id.toString()}
+                    snapToAlignment="center"
+                    decelerationRate={Platform.OS === 'ios' ? 'fast' : 'normal'}
+                    getItemLayout={(_data, index) => ({
+                        length: slideWidth,
+                        offset: slideWidth * index,
+                        index,
+                    })}
+                    initialNumToRender={1}
+                    maxToRenderPerBatch={2}
+                    windowSize={2}
+                    snapToInterval={slideWidth}
                 />
 
                 <View style={styles.dotsContainer}>
@@ -90,11 +168,20 @@ export default function LearnMore() {
                 </View>
 
                 <TouchableOpacity
-                    style={styles.button}
+                    style={[
+                        styles.button,
+                        isDesktop && {
+                            width: Math.min(400, containerWidth * 0.5),
+                            paddingVertical: 20
+                        }
+                    ]}
                     onPress={handleNext}
                     activeOpacity={0.8}
                 >
-                    <Text style={styles.buttonText}>
+                    <Text style={[
+                        styles.buttonText,
+                        isDesktop && { fontSize: 20 }
+                    ]}>
                         {currentScreen === data.length - 1 ? 'DONE' : 'NEXT'}
                     </Text>
                 </TouchableOpacity>
@@ -114,9 +201,9 @@ const styles = StyleSheet.create({
     },
     flatList: {
         flex: 1,
+        width: '100%',
     },
     slide: {
-        width: width,
         alignItems: 'flex-start',
         paddingHorizontal: 20,
         position: 'relative',
@@ -128,9 +215,6 @@ const styles = StyleSheet.create({
         height: 220,
         position: 'relative',
         justifyContent: 'center',
-    },
-    image: {
-        // old image style removed
     },
     heroImage: {
         width: 200,
