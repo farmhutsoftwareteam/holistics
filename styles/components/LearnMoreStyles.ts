@@ -61,30 +61,39 @@ export const createLearnMoreStyles = (
       justifyContent: "flex-start",
       paddingTop: 10,
     },
-    overlappingContainer: {
-      flexDirection: "row",
-      alignItems: "center",
-      position: "relative",
-      marginBottom: 20,
-      width: "100%",
-      height: "95%",
-    },
     mediaWrapper: {
       width: "100%",
       height: "95%",
       position: "relative",
+    },
+    slide1NumberContainer: {
+      position: "absolute",
+      left: isDesktop ? 210 : 150,
+      top: "50%",
+      transform: [{ translateY: isDesktop ? -70 : -60 }],
+      width: "auto",
+      zIndex: 9,
+    },
+    slide2NumberContainer: {
+      position: "absolute",
+      left: 0,
+      top: "50%",
+      transform: [{ translateY: isDesktop ? -70 : -60 }],
+      width: "100%",
+      paddingLeft: 0,
+      zIndex: 5,
     },
     heroImage: {
       width: isDesktop ? 234 : 180,
       height: isDesktop ? 252 : 198,
       borderRadius: 15,
       backgroundColor: "#8FA086",
-      zIndex: 10, // Increased z-index to ensure image is always on top
+      zIndex: 10,
       position: "absolute",
       top: "50%",
     },
     imageLeft: {
-      left: 0, // REFERENCE: Do not modify - slide 1 reference position
+      left: 0,
       transform: [{ translateY: isDesktop ? -126 : -99 }],
     },
     imageRight: {
@@ -96,22 +105,33 @@ export const createLearnMoreStyles = (
       color: "#FFFFFF",
       fontFamily: "Montserrat-Bold",
       letterSpacing: -3.2,
-      zIndex: 5, // Adjusted z-index to ensure number is always behind image
       position: "absolute",
-      width: "100%",
-      textAlign: "center",
     },
     numberLeft: {
-      // REFERENCE IMPLEMENTATION - DO NOT MODIFY
-      top: "50%", // Moved from bigNumber to separate styles
-      transform: [{ translateY: isDesktop ? -70 : -60 }], // Adjusted to better center with image
-      marginLeft: 30, // REFERENCE: Do not modify - creates specific overlap with image in slide 1
+      position: "relative",
+      top: 0,
+      right: 0,
+      transform: [],
+      textAlign: "right",
+      fontWeight: "300",
+      fontFamily: "Montserrat",
+      letterSpacing: 8,
+      fontSize: isDesktop ? 180 : 150,
+      lineHeight: isDesktop ? 200 : 170,
+      opacity: 1,
     },
     numberRight: {
-      // Only modifying styles for the 02 number, leaving 01 unchanged
-      top: "50%",
-      transform: [{ translateY: isDesktop ? -70 : -60 }],
-      right: isDesktop ? 60 : 50, // Moved more to the left for less overlap with the image
+      position: "relative",
+      top: 0,
+      left: isDesktop ? 16 : 12,
+      transform: [],
+      textAlign: "left",
+      fontWeight: "300",
+      fontFamily: "Montserrat",
+      letterSpacing: 8,
+      fontSize: isDesktop ? 180 : 150,
+      lineHeight: isDesktop ? 200 : 170,
+      opacity: 1,
     },
     categoryHeader: {
       fontSize: 12,
