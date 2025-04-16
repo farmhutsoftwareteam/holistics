@@ -1,13 +1,13 @@
 import React from 'react';
 import { View, SafeAreaView, useWindowDimensions } from 'react-native';
 import { router } from 'expo-router';
-import { useFonts } from '../../hooks/useFonts';
-import { useResponsiveLayout } from '../../hooks/useResponsiveLayout';
+import { useFonts } from '@/hooks/useFonts';
+import { useResponsiveLayout } from '@/hooks/useResponsiveLayout';
 import { Logo } from './Logo';
 import { OnboardingContent as ContentComponent } from './OnboardingContent';
 import { OnboardingActions } from './OnboardingActions';
-import { OnboardingService, OnboardingContent } from '../../services/OnboardingService';
-import { createOnboardingStyles } from '../../styles/components/OnboardingStyles';
+import { OnboardingService, OnboardingContent } from '@/services/OnboardingService';
+import { createOnboardingStyles } from '@/styles/components/OnboardingStyles';
 
 /**
  * Main onboarding component shown on the home screen
