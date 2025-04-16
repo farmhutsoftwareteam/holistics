@@ -8,6 +8,7 @@ interface QuizQuestionProps {
     selectedIdx: number | null;
     onSelect: (option: Option, index: number) => void;
     onNext: () => void;
+    onBack?: () => void;
     styles: any;
 }
 
@@ -19,6 +20,7 @@ export const QuizQuestion: React.FC<QuizQuestionProps> = ({
     selectedIdx,
     onSelect,
     onNext,
+    onBack,
     styles,
 }) => {
     return (

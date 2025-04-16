@@ -40,18 +40,32 @@ export default function QuizScreen() {
     useEffect(() => {
         // If we have a previously selected index for this question, use it
         setSelectedIdx(selectedIndexes[currentQuestion] || null);
-    }, [currentQuestion]);
+    }, [currentQuestion, selectedIndexes]);
 
     /**
      * Handle option selection
      */
     const handleSelect = (option: Option, idx: number) => {
-        setSelectedIdx(idx);
-
-        // Update selected indexes for this question
+        // First update the indexes array to persist the selection
         const newSelectedIndexes = [...selectedIndexes];
         newSelectedIndexes[currentQuestion] = idx;
         setSelectedIndexes(newSelectedIndexes);
+
+        // Then update the current selection state
+        // Using a slight timeout to avoid state batching issues
+        setTimeout(() => {
+            setSelectedIdx(idx);
+        }, 0);
+    };
+
+    /**
+     * Handle going back to the previous question
+     */
+    const handleBack = () => {
+        if (currentQuestion > 0) {
+            // Move to the previous question while maintaining all answers
+            setCurrentQuestion(currentQuestion - 1);
+        }
     };
 
     /**
@@ -90,6 +104,7 @@ export default function QuizScreen() {
      * Handle returning to home screen
      */
     const handleGoHome = () => {
+        // Only reset quiz state when completing the quiz
         resetQuizState();
         router.push('/');
     };
@@ -127,6 +142,7 @@ export default function QuizScreen() {
             selectedIdx={selectedIdx}
             onSelect={handleSelect}
             onNext={handleNext}
+            onBack={currentQuestion > 0 ? handleBack : undefined}
             styles={styles}
         />
     );

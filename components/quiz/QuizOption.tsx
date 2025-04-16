@@ -1,5 +1,5 @@
 import React from 'react';
-import { TouchableOpacity, Text, Image, View } from 'react-native';
+import { TouchableOpacity, Text, Image } from 'react-native';
 import { Option } from '@/services/QuizService';
 
 interface QuizOptionProps {
@@ -28,15 +28,20 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
     onSelect,
     styles,
 }) => {
+    // Direct handler for selection
+    const handlePress = () => {
+        onSelect(option, index);
+    };
+
     if (type === 'ChoiceTypeImage') {
         return (
             <TouchableOpacity
-                key={index}
                 style={[
                     styles.imageOption,
                     isSelected && styles.selectedOption,
                 ]}
-                onPress={() => onSelect(option, index)}
+                onPress={handlePress}
+                activeOpacity={0.7}
             >
                 <Image
                     source={{ uri: option.display }}
@@ -47,12 +52,12 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
     } else {
         return (
             <TouchableOpacity
-                key={index}
                 style={[
                     styles.textOption,
                     isSelected && styles.selectedOption,
                 ]}
-                onPress={() => onSelect(option, index)}
+                onPress={handlePress}
+                activeOpacity={0.7}
             >
                 <Text style={styles.optionText}>{option.display}</Text>
             </TouchableOpacity>
