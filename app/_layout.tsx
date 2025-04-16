@@ -58,7 +58,7 @@ function RootLayoutNavigation() {
             <TouchableOpacity
               onPress={handleBack}
               style={{
-                paddingHorizontal: 20,
+                paddingHorizontal: 0,
                 height: 32,
                 justifyContent: 'center'
               }}
@@ -88,7 +88,7 @@ function RootLayoutNavigation() {
             <TouchableOpacity
               onPress={handleQuizBack}
               style={{
-                paddingHorizontal: 20,
+                paddingHorizontal: 0,
                 height: 32,
                 justifyContent: 'center',
               }}
@@ -104,6 +104,25 @@ function RootLayoutNavigation() {
           headerShown: true,
           headerTitle: "What can we help with",
           headerTitleAlign: 'center',
+          headerLeft: ({ canGoBack }) => {
+            if (!canGoBack) return null;
+            return (
+              <TouchableOpacity
+                onPress={handleBack}
+                style={{
+                  paddingHorizontal: 0,
+                  height: 32,
+                  justifyContent: 'center'
+                }}
+              >
+                <Text style={{
+                  fontSize: 32,
+                  color: '#0B3B3C',
+                  lineHeight: 32
+                }}>×</Text>
+              </TouchableOpacity>
+            );
+          },
         }}
       />
     </Stack>
