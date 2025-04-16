@@ -9,7 +9,6 @@ export default function App() {
     return (
         <View style={[
             styles.container,
-            
             isWeb && styles.webContainer
         ]}>
             <Onboarding />
@@ -23,8 +22,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#A5B79F',
     },
     webContainer: {
-        // For web, we can use gradients for a more refined look
         backgroundColor: '#A5B79F',
-        // Note: actual CSS gradients would be applied via Platform.select or a web-specific stylesheet
     },
 });

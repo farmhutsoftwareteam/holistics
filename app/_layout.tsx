@@ -1,10 +1,10 @@
-import { Stack } from "expo-router";
+import { Stack, router } from "expo-router";
 import { Text, TouchableOpacity } from 'react-native';
-import { router, useNavigation, usePathname, useSegments } from 'expo-router';
+
 import * as Haptics from 'expo-haptics';
 import { AntDesign } from '@expo/vector-icons';
 import React from "react";
-import { QuizProvider, useQuizContext } from "../context/QuizContext";
+import { QuizProvider, useQuizContext } from "@/context/QuizContext";
 import { Platform } from 'react-native';
 
 export default function RootLayout() {
