@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 import { Image } from 'expo-image';
 import { LearnMoreItem, LearnMoreService } from '@/services/LearnMoreService';
 
@@ -60,12 +60,24 @@ export const LearnMoreSlide: React.FC<LearnMoreSlideProps> = ({
                 </View>
             </View>
 
-            {/* Bottom half container with text */}
-            <View style={styles.bottomContainer}>
+            {/* Bottom half container with text - now scrollable */}
+            <ScrollView
+                style={{
+                    flex: 1,
+                    height: "50%",
+                    paddingHorizontal: styles.bottomContainer.paddingHorizontal
+                }}
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={{
+                    paddingBottom: 20,
+                    paddingTop: styles.bottomContainer.paddingTop,
+                    justifyContent: styles.bottomContainer.justifyContent
+                }}
+            >
                 <Text style={styles.categoryHeader}>{item.header}</Text>
                 <Text style={styles.title}>{item.title}</Text>
                 <Text style={styles.subtitle}>{item.subtitle}</Text>
-            </View>
+            </ScrollView>
         </View>
     );
 }; 
