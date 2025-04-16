@@ -100,10 +100,10 @@ export const createLearnMoreStyles = (
       marginLeft: 30, // REFERENCE: Do not modify - creates specific overlap with image in slide 1
     },
     numberRight: {
-      // Slide 2 number styles - can be modified independently
-      top: "50%", // Same as image top position for vertical centering
-      transform: [{ translateY: isDesktop ? -60 : -50 }], // Same as numberLeft for consistent vertical centering
-      marginRight: 250, // Significantly increased to create a dramatic visual shift left
+      right: isDesktop ? 230 : 180, // Increased from 180/130 to create more space
+      top: "50%",
+      transform: [{ translateY: isDesktop ? -70 : -60 }],
+      marginRight: 0, // Remove negative margin to prevent overlap
     },
     categoryHeader: {
       fontSize: 12,
