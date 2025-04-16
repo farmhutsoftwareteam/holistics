@@ -22,27 +22,32 @@ export const LearnMoreSlide: React.FC<LearnMoreSlideProps> = ({
 
     return (
         <View style={styles.slide}>
-            <View style={styles.heroContainer}>
-                <Text
-                    style={[
+            {/* Top half container with image and number */}
+            <View style={styles.topContainer}>
+                <View style={styles.mediaWrapper}>
+                    {/* Background number */}
+                    <Text style={[
                         styles.bigNumber,
-                        isEvenIndex ? styles.numberRight : styles.numberLeft,
-                    ]}
-                >
-                    {String(index + 1).padStart(2, '0')}
-                </Text>
-                <Image
-                    style={[
-                        styles.heroImage,
-                        isEvenIndex ? styles.imageLeft : styles.imageRight,
-                    ]}
-                    source={LearnMoreService.getImageSource(index)}
-                    contentFit="cover"
-                    transition={200}
-                />
+                        isEvenIndex ? styles.numberLeft : styles.numberRight
+                    ]}>
+                        {String(index + 1).padStart(2, '0')}
+                    </Text>
+
+                    {/* Image always at same position */}
+                    <Image
+                        style={[
+                            styles.heroImage,
+                            isEvenIndex ? styles.imageLeft : styles.imageRight
+                        ]}
+                        source={LearnMoreService.getImageSource(index)}
+                        contentFit="cover"
+                        transition={200}
+                    />
+                </View>
             </View>
 
-            <View style={styles.textContainer}>
+            {/* Bottom half container with text */}
+            <View style={styles.bottomContainer}>
                 <Text style={styles.categoryHeader}>{item.header}</Text>
                 <Text style={styles.title}>{item.title}</Text>
                 <Text style={styles.subtitle}>{item.subtitle}</Text>

@@ -5,6 +5,19 @@ import { StyleSheet } from "react-native";
  * @param isDesktop Whether the device is in desktop mode
  * @param containerWidth The container width from responsive layout
  * @param slideWidth The width of each slide
+ *
+ * !!! IMPORTANT !!!
+ * REFERENCE IMPLEMENTATION:
+ * The configuration for Slide 1 (index 0) with the "01" number and left-aligned image
+ * is the reference design. It has been carefully positioned to create a specific visual effect
+ * where a small part of the "0" appears behind the image.
+ *
+ * DO NOT MODIFY:
+ * - heroImage + imageLeft positioning
+ * - bigNumber + numberLeft positioning and z-index
+ * - The 30px left margin on numberLeft
+ *
+ * All future changes to other slides should maintain visual consistency with Slide 1.
  */
 export const createLearnMoreStyles = (
   isDesktop: boolean,
@@ -25,63 +38,72 @@ export const createLearnMoreStyles = (
       width: "100%",
     },
     slide: {
-      alignItems: "flex-start",
-      paddingHorizontal: isDesktop ? 32 : 16,
-      position: "relative",
       flex: 1,
-      justifyContent: "center",
       width: slideWidth,
-      ...(isDesktop && {
-        alignItems: "center",
-      }),
-    },
-    heroContainer: {
-      width: "100%",
-      height: isDesktop ? 280 : 220,
-      position: "relative",
       justifyContent: "center",
+      position: "relative",
       ...(isDesktop && {
         maxWidth: 800,
       }),
     },
+    topContainer: {
+      flex: 1,
+      height: "50%",
+      paddingHorizontal: isDesktop ? 16 : 12,
+      position: "relative",
+      paddingBottom: 0,
+      justifyContent: "flex-end",
+    },
+    bottomContainer: {
+      flex: 1,
+      height: "50%",
+      paddingHorizontal: isDesktop ? 16 : 12,
+      justifyContent: "flex-start",
+      paddingTop: 10,
+    },
+    mediaWrapper: {
+      width: "100%",
+      height: "95%",
+      position: "relative",
+    },
     heroImage: {
-      width: isDesktop ? 260 : 200,
-      height: isDesktop ? 280 : 220,
+      width: isDesktop ? 234 : 180,
+      height: isDesktop ? 252 : 198,
       borderRadius: 15,
-      position: "absolute",
-      top: 0,
-      zIndex: 2,
       backgroundColor: "#8FA086",
+      zIndex: 5, // REFERENCE: Must be higher than bigNumber z-index
+      position: "absolute",
+      top: "50%",
     },
     imageLeft: {
-      left: 10,
+      left: 0, // REFERENCE: Do not modify - slide 1 reference position
+      transform: [{ translateY: isDesktop ? -126 : -99 }],
     },
     imageRight: {
-      right: 1,
+      right: 0,
+      transform: [{ translateY: isDesktop ? -126 : -99 }],
     },
     bigNumber: {
       fontSize: isDesktop ? 140 : 120,
       color: "#FFFFFF",
       fontFamily: "Montserrat-Bold",
-      position: "absolute",
-      top: 10,
-      zIndex: 1,
       letterSpacing: -3.2,
+      zIndex: 1, // REFERENCE: Must be lower than heroImage z-index
+      position: "absolute",
+      width: "100%",
+      textAlign: "center",
     },
     numberLeft: {
-      left: 1,
+      // REFERENCE IMPLEMENTATION - DO NOT MODIFY
+      top: "50%", // Moved from bigNumber to separate styles
+      transform: [{ translateY: isDesktop ? -60 : -50 }], // Moved from bigNumber to separate styles
+      marginLeft: 30, // REFERENCE: Do not modify - creates specific overlap with image in slide 1
     },
     numberRight: {
-      right: 1,
-    },
-    textContainer: {
-      marginTop: isDesktop ? 40 : 20,
-      width: "100%",
-      paddingHorizontal: isDesktop ? 16 : 12,
-      alignItems: "flex-start",
-      ...(isDesktop && {
-        maxWidth: 800,
-      }),
+      // Slide 2 number styles - can be modified independently
+      top: "50%", // Same as image top position for vertical centering
+      transform: [{ translateY: isDesktop ? -60 : -50 }], // Same as numberLeft for consistent vertical centering
+      marginRight: 100,
     },
     categoryHeader: {
       fontSize: 12,
@@ -89,14 +111,15 @@ export const createLearnMoreStyles = (
       fontFamily: "Montserrat-Bold",
       letterSpacing: 1.5,
       textTransform: "uppercase",
-      marginBottom: 10,
+      marginTop: 0,
+      marginBottom: 6,
     },
     title: {
       fontSize: isDesktop ? 32 : 26,
       color: "#0B3B3C",
       fontFamily: "Montserrat-Bold",
       textAlign: "left",
-      marginBottom: 10,
+      marginBottom: 6,
       lineHeight: isDesktop ? 40 : 34,
     },
     subtitle: {
