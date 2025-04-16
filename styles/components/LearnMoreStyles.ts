@@ -26,7 +26,7 @@ export const createLearnMoreStyles = (
     },
     slide: {
       alignItems: "flex-start",
-      paddingHorizontal: isDesktop ? 40 : 20,
+      paddingHorizontal: isDesktop ? 32 : 16,
       position: "relative",
       flex: 1,
       justifyContent: "center",
@@ -60,7 +60,7 @@ export const createLearnMoreStyles = (
       right: 1,
     },
     bigNumber: {
-      fontSize: isDesktop ? 220 : 180,
+      fontSize: isDesktop ? 140 : 120,
       color: "#FFFFFF",
       fontFamily: "Montserrat-Bold",
       position: "absolute",
@@ -77,7 +77,7 @@ export const createLearnMoreStyles = (
     textContainer: {
       marginTop: isDesktop ? 40 : 20,
       width: "100%",
-      paddingHorizontal: 20,
+      paddingHorizontal: isDesktop ? 16 : 12,
       alignItems: "flex-start",
       ...(isDesktop && {
         maxWidth: 800,
@@ -106,7 +106,7 @@ export const createLearnMoreStyles = (
       textAlign: "left",
       lineHeight: isDesktop ? 28 : 24,
       ...(isDesktop && {
-        maxWidth: "80%",
+        maxWidth: "85%",
       }),
     },
     dotsContainer: {
