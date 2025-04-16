@@ -96,14 +96,14 @@ export const createLearnMoreStyles = (
     numberLeft: {
       // REFERENCE IMPLEMENTATION - DO NOT MODIFY
       top: "50%", // Moved from bigNumber to separate styles
-      transform: [{ translateY: isDesktop ? -60 : -50 }], // Moved from bigNumber to separate styles
+      transform: [{ translateY: isDesktop ? -70 : -60 }], // Adjusted to better center with image
       marginLeft: 30, // REFERENCE: Do not modify - creates specific overlap with image in slide 1
     },
     numberRight: {
       // Slide 2 number styles - can be modified independently
       top: "50%", // Same as image top position for vertical centering
       transform: [{ translateY: isDesktop ? -60 : -50 }], // Same as numberLeft for consistent vertical centering
-      marginRight: 100,
+      marginRight: 250, // Significantly increased to create a dramatic visual shift left
     },
     categoryHeader: {
       fontSize: 12,
