@@ -61,6 +61,14 @@ export const createLearnMoreStyles = (
       justifyContent: "flex-start",
       paddingTop: 10,
     },
+    overlappingContainer: {
+      flexDirection: "row",
+      alignItems: "center",
+      position: "relative",
+      marginBottom: 20,
+      width: "100%",
+      height: "95%",
+    },
     mediaWrapper: {
       width: "100%",
       height: "95%",
@@ -71,7 +79,7 @@ export const createLearnMoreStyles = (
       height: isDesktop ? 252 : 198,
       borderRadius: 15,
       backgroundColor: "#8FA086",
-      zIndex: 5, // REFERENCE: Must be higher than bigNumber z-index
+      zIndex: 10, // Increased z-index to ensure image is always on top
       position: "absolute",
       top: "50%",
     },
@@ -88,7 +96,7 @@ export const createLearnMoreStyles = (
       color: "#FFFFFF",
       fontFamily: "Montserrat-Bold",
       letterSpacing: -3.2,
-      zIndex: 1, // REFERENCE: Must be lower than heroImage z-index
+      zIndex: 5, // Adjusted z-index to ensure number is always behind image
       position: "absolute",
       width: "100%",
       textAlign: "center",
@@ -100,10 +108,10 @@ export const createLearnMoreStyles = (
       marginLeft: 30, // REFERENCE: Do not modify - creates specific overlap with image in slide 1
     },
     numberRight: {
-      right: isDesktop ? 230 : 180, // Increased from 180/130 to create more space
+      // Only modifying styles for the 02 number, leaving 01 unchanged
       top: "50%",
       transform: [{ translateY: isDesktop ? -70 : -60 }],
-      marginRight: 0, // Remove negative margin to prevent overlap
+      right: isDesktop ? 60 : 50, // Moved more to the left for less overlap with the image
     },
     categoryHeader: {
       fontSize: 12,
@@ -161,6 +169,22 @@ export const createLearnMoreStyles = (
       color: "#FFFFFF",
       fontFamily: "Montserrat-SemiBold",
       fontSize: isDesktop ? 20 : 18,
+    },
+    header: {
+      flexDirection: "row",
+      alignItems: "center",
+      paddingVertical: 20,
+    },
+    backButton: {
+      padding: 8,
+    },
+    headerText: {
+      flex: 1,
+      fontSize: 18,
+      fontWeight: "600",
+      color: "#0B3B3C",
+      textAlign: "center",
+      marginRight: 40,
     },
   });
 };
