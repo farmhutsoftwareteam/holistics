@@ -1,6 +1,6 @@
 import React, { createContext, useState, ReactNode } from 'react';
 
-// Define the shape of our context data
+
 interface QuizContextType {
     currentQuestion: number;
     setCurrentQuestion: (questionIndex: number) => void;
@@ -9,9 +9,15 @@ interface QuizContextType {
     isSuccess: boolean;
     setSuccess: (success: boolean) => void;
     resetQuizState: () => void;
+    answers: (string | boolean)[];
+    setAnswers: (answers: (string | boolean)[]) => void;
+    selectedIndexes: (number | null)[];
+    setSelectedIndexes: (indexes: (number | null)[]) => void;
+    selectedIdx: number | null;
+    setSelectedIdx: (index: number | null) => void;
 }
 
-// Create the context with default values
+
 export const QuizContext = createContext<QuizContextType>({
     currentQuestion: 0,
     setCurrentQuestion: () => { },
@@ -20,6 +26,12 @@ export const QuizContext = createContext<QuizContextType>({
     isSuccess: false,
     setSuccess: () => { },
     resetQuizState: () => { },
+    answers: [],
+    setAnswers: () => { },
+    selectedIndexes: [],
+    setSelectedIndexes: () => { },
+    selectedIdx: null,
+    setSelectedIdx: () => { },
 });
 
 // Props for the provider component
@@ -35,15 +47,21 @@ export const QuizProvider: React.FC<QuizProviderProps> = ({ children }) => {
     const [currentQuizQuestion, setCurrentQuizQuestion] = useState(0);
     const [isRejected, setIsRejected] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
+    const [answers, setAnswers] = useState<(string | boolean)[]>([]);
+    const [selectedIndexes, setSelectedIndexes] = useState<(number | null)[]>([]);
+    const [selectedIdx, setSelectedIdx] = useState<number | null>(null);
 
     // Function to reset all quiz state
     const resetQuizState = () => {
         setCurrentQuizQuestion(0);
         setIsRejected(false);
         setIsSuccess(false);
+        setAnswers([]);
+        setSelectedIndexes([]);
+        setSelectedIdx(null);
     };
 
-    // Create the value object with the current state and setters
+   
     const value = {
         currentQuestion: currentQuizQuestion,
         setCurrentQuestion: setCurrentQuizQuestion,
@@ -52,6 +70,12 @@ export const QuizProvider: React.FC<QuizProviderProps> = ({ children }) => {
         isSuccess,
         setSuccess: setIsSuccess,
         resetQuizState,
+        answers,
+        setAnswers,
+        selectedIndexes,
+        setSelectedIndexes,
+        selectedIdx,
+        setSelectedIdx,
     };
 
     return <QuizContext.Provider value={value}>{children}</QuizContext.Provider>;

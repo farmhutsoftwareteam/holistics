@@ -1,10 +1,20 @@
+import React from 'react';
 import { Link, Stack } from 'expo-router';
 import { StyleSheet } from 'react-native';
 
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
+import { useResponsiveLayout } from '@/hooks/useResponsiveLayout';
 
+/**
+ * Screen displayed when a route is not found
+ */
 export default function NotFoundScreen() {
+  const { isDesktop } = useResponsiveLayout();
+
+  // Create styles with responsive values
+  const styles = createNotFoundStyles(isDesktop);
+
   return (
     <>
       <Stack.Screen options={{ title: 'Oops!' }} />
@@ -18,15 +28,19 @@ export default function NotFoundScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+/**
+ * Creates styles for the not found screen based on device metrics
+ * @param isDesktop Whether the device is in desktop mode
+ */
+const createNotFoundStyles = (isDesktop: boolean) => StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 20,
+    padding: isDesktop ? 40 : 20,
   },
   link: {
-    marginTop: 15,
-    paddingVertical: 15,
+    marginTop: isDesktop ? 24 : 15,
+    paddingVertical: isDesktop ? 20 : 15,
   },
 });
